@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pychadwick"
-version = "0.6.1"
+version = "0.7.0"
 description = "Python bindings to the Chadwick library (Retrosheet event-file parser)"
 readme = "README.md"
 requires-python = ">=3.9"

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15...3.30)
 project(libchadwick C)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
-add_definitions(-DVERSION=\"0.7.X\")
+add_definitions(-DVERSION=\"0.7.0\")
 
 file(GLOB CWLIB_SOURCES "src/pychadwicklib/cwlib/*.c")
 include_directories(src/pychadwicklib)

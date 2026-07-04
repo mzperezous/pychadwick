@@ -254,7 +254,9 @@ class Chadwick:
                         if str(data_type_conversion).startswith("Int")
                         else df.loc[:, column_name].astype(data_type_conversion)
                     )
-                    df.loc[:, column_name] = converted_values
+                    # Whole-column assignment (not .loc in-place) so a dtype
+                    # change is allowed under pandas >= 3.0's stricter setitem.
+                    df[column_name] = converted_values
                 except TypeError:
                     logger.error(
                         f"Cannot convert column {column_name} to data_type {data_type_conversion}"

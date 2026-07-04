@@ -18,6 +18,15 @@ def team_events():
     return team_events
 
 
+RETROSHEET_RAW = "https://raw.githubusercontent.com/chadwickbureau/retrosheet/master"
+
+
+def event_url(name):
+    # Retrosheet serves event files under seasons/<year>/; year = leading 4 chars
+    year = name[:4]
+    return f"{RETROSHEET_RAW}/seasons/{year}/{name}"
+
+
 def get_event_path(url):
     file_path = tempfile.gettempdir() + "/tmp.EVA"
     with open(file_path, "w") as fh:
@@ -32,7 +41,7 @@ def test_chadwick():
 def test_load_games(chadwick, team_events):
     for team_event in team_events:
         event_path = get_event_path(
-            f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/event/regular/{team_event}"
+            event_url(team_event)
         )
         games = chadwick.games(event_path)
         game = next(games)
@@ -44,7 +53,7 @@ def test_load_games(chadwick, team_events):
 def test_load_games_to_df(chadwick, team_events):
     for team_event in team_events:
         event_path = get_event_path(
-            f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/event/regular/{team_event}"
+            event_url(team_event)
         )
         games = chadwick.games(event_path)
         df = chadwick.games_to_dataframe(games)
@@ -63,13 +72,12 @@ def test_load_games_to_df_missing_path(chadwick, team_events):
 def test_game_to_csv(chadwick, team_events):
     for team_event in team_events:
         event_path = get_event_path(
-            f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/event/regular/{team_event}"
+            event_url(team_event)
         )
         games = chadwick.games(event_path)
         dfs = [chadwick.process_game_csv(game) for game in games]
 
 
 def test_init_read_league(chadwick):
-    url = "https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/event/regular/TEAM1982"
-    file_path = get_event_path(url)
+    file_path = get_event_path(event_url("TEAM1982"))
     _ = chadwick.cw_league_read(bytes(file_path, "utf8"))
